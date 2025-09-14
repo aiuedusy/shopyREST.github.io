@@ -3,51 +3,686 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Download Science Book</title>
+    <title>Physics Books Collection</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Minimal CSS */
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 2rem;
-            background: #f5f5f5;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .category-filter {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
+        .category-btn {
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .category-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .category-btn.active {
+            background: #e74c3c;
+        }
+        
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
         .book-card {
             background: white;
-            max-width: 400px;
-            margin: 2rem auto;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
         }
-        img {
-            width: 200px;
-            height: 300px;
+        
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .book-image {
+            width: 100%;
+            height: 220px;
             object-fit: cover;
-            border-radius: 5px;
+            border-bottom: 1px solid #eee;
         }
-        .buy-button {
-            background: #007bff;
+        
+        .book-content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .book-title {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+        
+        .book-author {
+            color: #7f8c8d;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+        
+        .book-details {
+            color: #5d6d7e;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .book-price {
+            font-size: 1.5rem;
+            color: #e74c3c;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .book-casing {
+            display: inline-block;
+            padding: 5px 10px;
+            background: #3498db;
             color: white;
-            padding: 1rem 2rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+        }
+        
+        .buy-button {
+            display: block;
+            width: 100%;
+            background: #3498db;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: background 0.3s ease;
+            margin-top: auto;
+        }
+        
+        .buy-button:hover {
+            background: #2980b9;
+        }
+        
+        .book-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            color: #95a5a6;
+            font-size: 0.9rem;
+        }
+        
+        .book-rating {
+            color: #f39c12;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .pagination-btn {
+            padding: 10px 18px;
+            margin: 0 5px;
+            background: #3498db;
+            color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            margin: 1rem 0;
+            transition: all 0.3s ease;
+        }
+        
+        .pagination-btn:hover {
+            background: #2980b9;
+        }
+        
+        .pagination-btn.active {
+            background: #2c3e50;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 25px;
+            color: #7f8c8d;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .books-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .category-filter {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .category-btn {
+                width: 80%;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="book-card">
-        <!-- Replace with your book’s details -->
-        <h1>Your Book Title</h1>
-        <img src="your-cover-image.jpg" alt="Book Cover">
-        <p>Price: $9.99</p>
-        <!-- Replace PAYMENT_LINK with your PayPal/Gumroad link -->
-        <a href="PAYMENT_LINK" class="buy-button">Buy & Download Now</a>
-        <p>After payment, you’ll redirect to download.</p>
+    <div class="container">
+        <header>
+            <h1>Physics Books Collection</h1>
+            <p class="subtitle">Explore our extensive collection of physics books across all disciplines - from statistical physics to quantum mechanics and cosmology</p>
+        </header>
+        
+        <div class="category-filter">
+            <button class="category-btn active">All Books</button>
+            <button class="category-btn">Statistical Physics</button>
+            <button class="category-btn">Quantum Mechanics</button>
+            <button class="category-btn">Cosmology</button>
+            <button class="category-btn">Mathematical Physics</button>
+        </div>
+        
+        <div class="books-grid">
+            <!-- Book 1 -->
+            <div class="book-card">
+                <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Statistical Physics An Introduction" class="book-image">
+                <div class="book-content">
+                    <h2 class="book-title">Statistical Physics An Introduction</h2>
+                    <p class="book-author">By Yoshioka, Daijiro</p>
+                    <div class="book-details">
+                        <p>Publisher: Springer-Verlag Berlin Heidelberg</p>
+                        <p>Published: 2007</p>
+                    </div>
+                    <span class="book-casing">Hardcover</span>
+                    <p class="book-price">$89.99</p>
+                    <a href="#" class="buy-button">Buy Now</a>
+                    <div class="book-footer">
+                        <span class="book-rating">★★★★☆</span>
+                        <span>320 pages</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Book 2 -->
+            <div class="book-card">
+                <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Explorations in Mathematical Physics" class="book-image">
+                <div class="book-content">
+                    <h2 class="book-title">Explorations in Mathematical Physics</h2>
+                    <p class="book-author">By Koks, Don</p>
+                    <div class="book-details">
+                        <p>Publisher: Springer Science+Business Media, LLC</p>
+                        <p>Published: 2006</p>
+                    </div>
+                    <span class="book-casing">Hardcover</span>
+                    <p class="book-price">$79.99</p>
+                    <a href="#" class="buy-button">Buy Now</a>
+                    <div class="book-footer">
+                        <span class="book-rating">★★★★★</span>
+                        <span>350 pages</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Book 3 -->
+            <div class="book-card">
+                <img src="https://images.unsplash.com/photo-1589998059171-988d887df646?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Elements for Physics" class="book-image">
+                <div class="book-content">
+                    <h2 class="book-title">Elements for Physics</h2>
+                    <p class="book-author">By Tarantola, Albert</p>
+                    <div class="book-details">
+                        <p>Publisher: Springer-Verlag Berlin Heidelberg</p>
+                        <p>Published: 2006</p>
+                    </div>
+                    <span class="book-casing">Paperback</span>
+                    <p class="book-price">$74.50</p>
+                    <a href="#" class="buy-button">Buy Now</a>
+                    <div class="book-footer">
+                        <span class="book-rating">★★★★☆</span>
+                        <span>290 pages</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Book 4 -->
+            <div class="book-card">
+                <img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Essentials of physics" class="book-image">
+                <div class="book-content">
+                    <h2 class="book-title">Essentials of physics</h2>
+                    <p class="book-author">By Cutnell, John D. & Johnson, Kenneth W.</p>
+                    <div class="book-details">
+                        <p>Publisher: John Wiley</p>
+                        <p>Published: 2006</p>
+                    </div>
+                    <span class="book-casing">Hardcover</span>
+                    <p class="book-price">$95.00</p>
+                    <a href="#" class="buy-button">Buy Now</a>
+                    <div class="book-footer">
+                        <span class="book-rating">★★★★★</span>
+                        <span>480 pages</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Book 5 -->
+            <div class="book-card">
+                <img src="https://images.unsplash.com/photo-1505506874110-6a7a69069a08?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Quantum Physics" class="book-image">
+                <div class="book-content">
+                    <h2 class="book-title">Quantum Physics</h2>
+                    <p class="book-author">By Scheck, Florian</p>
+                    <div class="book-details">
+                        <p>Publisher: Springer-Verlag Berlin Heidelberg</p>
+                        <p>Published: 2007</p>
+                    </div>
+                    <span class="book-casing">Hardcover</span>
+                    <p class="book-price">$82.75</p>
+                    <a href="#" class="buy-button">Buy Now</a>
+                    <div class="book-footer">
+                        <span class="book-rating">★★★★☆</span>
+                        <span>410 pages</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Book 6 -->
+            <div class="book-card">
+                <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Experiments in physics" class="book-image">
+                <div class="book-content">
+                    <h2 class="book-title">Experiments in physics</h2>
+                    <p class="book-author">By Issa, Almoutaz</p>
+                    <div class="book-details">
+                        <p>Publisher: Arab International University</p>
+                        <p>Published: 2019</p>
+                    </div>
+                    <span class="book-casing">Paperback</span>
+                    <p class="book-price">$45.99</p>
+                    <a href="#" class="buy-button">Buy Now</a>
+                    <div class="book-footer">
+                        <span class="book-rating">★★★★☆</span>
+                        <span>220 pages</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Book 7 -->
+            <div class="book-card">
+                <img src="https://images.unsplash.com/photo-1576086213369-97a306d36557?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Basic Theoretical Physics" class="book-image">
+                <div class="book-content">
+                    <h2 class="book-title">Basic Theoretical Physics</h2>
+                    <p class="book-author">By Krey, Uwe & Owen, Anthony</p>
+                    <div class="book-details">
+                        <p>Publisher: Springer-Verlag Berlin Heidelberg</p>
+                        <p>Published: 2007</p>
+                    </div>
+                    <span class="book-casing">Hardcover</span>
+                    <p class="book-price">$88.25</p>
+                    <a href="#" class="buy-button">Buy Now</a>
+                    <div class="book-footer">
+                        <span class="book-rating">★★★★★</span>
+                        <span>380 pages</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Book 8 -->
+            <div class="book-card">
+                <img src="https://images.unsplash.com/photo-1559757175-0eb30cd8c063?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Precisely Predictable Dirac Observables" class="book-image">
+                <div class="book-content">
+                    <h2 class="book-title">Precisely Predictable Dirac Observables</h2>
+                    <p class="book-author">By Cordes, Heinz Otto</p>
+                    <div class="book-details">
+                        <p>Publisher: Springer</p>
+                        <p>Published: 2007</p>
+                    </div>
+                    <span class="book-casing">Hardcover</span>
+                    <p class="book-price">$96.50</p>
+                    <a href="#" class="buy-button">Buy Now</a>
+                    <div class="book-footer">
+                        <span class="book-rating">★★★★☆</span>
+                        <span>340 pages</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Book 9 -->
+            <div class="book-card">
+                <img src="https://images.unsplash.com/photo-1593079831268-3381b0db4a77?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Quantum Analogues" class="book-image">
+                <div class="book-content">
+                    <h2 class="book-title">Quantum Analogues: From Phase Transitions to Black Holes and Cosmology</h2>
+                    <p class="book-author">By Unruh, William G. & Schützhold, Ralf</p>
+                    <div class="book-details">
+                        <p>Publisher: Springer</p>
+                        <p>Published: 2007</p>
+                    </div>
+                    <span class="book-casing">Hardcover</span>
+                    <p class="book-price">$105.00</p>
+                    <a href="#" class="buy-button">Buy Now</a>
+                    <div class="book-footer">
+                        <span class="book-rating">★★★★★</span>
+                        <span>420 pages</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Book 10 -->
+            <div class="book-card">
+                <img src="https://images.unsplash.com/photo-1465156799763-5c063911c8fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Operational Quantum Theory I" class="book-image">
+                <div class="book-content">
+                    <h2 class="book-title">Operational Quantum Theory I: Nonrelativistic Structures</h2>
+                    <p class="book-author">By Saller, Heinrich</p>
+                    <div class="book-details">
+                        <p>Publisher: Springer Science+Business Media, Inc.</p>
+                        <p>Published: 2006</p>
+                    </div>
+                    <span class="book-casing">Hardcover</span>
+                    <p class="book-price">$91.75</p>
+                    <a href="#" class="buy-button">Buy Now</a>
+                    <div class="book-footer">
+                        <span class="book-rating">★★★★☆</span>
+                        <span>360 pages</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Continue with the remaining books in the same pattern -->
+            <!-- Book 11 -->
+            <div class="book-card">
+                <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Operational Quantum Theory II" class="book-image">
+                <div class="book-content">
+                    <h2 class="book-title">Operational Quantum Theory II: Relativistic Structures</h2>
+                    <p class="book-author">By Saller, Heinrich</p>
+                    <div class="book-details">
+                        <p>Publisher: Springer Science+Business Media, Inc.</p>
+                        <p>Published: 2006</p>
+                    </div>
+                    <span class="book-casing">Hardcover</span>
+                    <p class="book-price">$91.75</p>
+                    <a href="#" class="buy-button">Buy Now</a>
+                    <div class="book-footer">
+                        <span class="book-rating">★★★★☆</span>
+                        <span>370 pages</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Book 12 -->
+            <div class="book-card">
+                <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Mathematical Physics of Quantum Mechanics" class="book-image">
+                <div class="book-content">
+                    <h2 class="book-title">Mathematical Physics of Quantum Mechanics</h2>
+                    <p class="book-author">By Asch, Joachim & Joye, Alain</p>
+                    <div class="book-details">
+                        <p>Publisher: Springer</p>
+                        <p>Published: 2006</p>
+                    </div>
+                    <span class="book-casing">Hardcover</span>
+                    <p class="book-price">$99.99</p>
+                    <a href="#" class="buy-button">Buy Now</a>
+                    <div class="book-footer">
+                        <span class="book-rating">★★★★★</span>
+                        <span>400 pages</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Book 13 -->
+            <div class="book-card">
+                <img src="https://images.unsplash.com/photo-1579829366248-2042498416c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="The Theory of Quark and Gluon Interactions" class="book-image">
+                <div class="book-content">
+                    <h2 class="book-title">The Theory of Quark and Gluon Interactions</h2>
+                    <p class="book-author">By Ynduráin, Francisco J.</p>
+                    <div class="book-details">
+                        <p>Publisher: Springer</p>
+                        <p>Published: 2006</p>
+                    </div>
+                    <span class="book-casing">Hardcover</span>
+                    <p class="book-price">$110.50</p>
+                    <a href="#" class="buy-button">Buy Now</a>
+                    <div class="book-footer">
+                        <span class="book-rating">★★★★☆</span>
+                        <span>450 pages</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Book 14 -->
+            <div class="book-card">
+                <img src="https://images.unsplash.com/photo-1581092581287-fe2a200a8ed4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Cosmological Crossroads" class="book-image">
+                <div class="book-content">
+                    <h2 class="book-title">Cosmological Crossroads</h2>
+                    <p class="book-author">By Cotsakis, Spiros & Papantonopoulos, Eleftherios</p>
+                    <div class="book-details">
+                        <p>Publisher: Springer-Verlag Berlin Heidelberg</p>
+                        <p>Published: 2006</p>
+                    </div>
+                    <span class="book-casing">Hardcover</span>
+                    <p class="book-price">$102.25</p>
+                    <a href="#" class="buy-button">Buy Now</a>
+                    <div class="book-footer">
+                        <span class="book-rating">★★★★★</span>
+                        <span>390 pages</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Book 15 -->
+            <div class="book-card">
+                <img src="https://images.unsplash.com/photo-1581093459446-0b6f75e5e7e6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Supersymmetric Mechanics – Vol. 1" class="book-image">
+                <div class="book-content">
+                    <h2 class="book-title">Supersymmetric Mechanics – Vol. 1</h2>
+                    <p class="book-author">By Bellucci, Stefano</p>
+                    <div class="book-details">
+                        <p>Publisher: Springer</p>
+                        <p>Published: 2006</p>
+                    </div>
+                    <span class="book-casing">Hardcover</span>
+                    <p class="book-price">$97.99</p>
+                    <a href="#" class="buy-button">Buy Now</a>
+                    <div class="book-footer">
+                        <span class="book-rating">★★★★☆</span>
+                        <span>410 pages</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Book 16 -->
+            <div class="book-card">
+                <img src="https://images.unsplash.com/photo-1550828484-55d1c10d091f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Infrarotthermographie" class="book-image">
+                <div class="book-content">
+                    <h2 class="book-title">Infrarotthermographie</h2>
+                    <p class="book-author">By Schuster, Norbert & Kolobrodov, Valentin G.</p>
+                    <div class="book-details">
+                        <p>Publisher: WILEY-VCH</p>
+                        <p>Published: 2004</p>
+                    </div>
+                    <span class="book-casing">Hardcover</span>
+                    <p class="book-price">$85.00</p>
+                    <a href="#" class="buy-button">Buy Now</a>
+                    <div class="book-footer">
+                        <span class="book-rating">★★★★☆</span>
+                        <span>320 pages</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Book 17 -->
+            <div class="book-card">
+                <img src="https://images.unsplash.com/photo-1581093458973-ebc44c6f931c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="University physics with modern physics" class="book-image">
+                <div class="book-content">
+                    <h2 class="book-title">University physics with modern physics</h2>
+                    <p class="book-author">By Young, Hugh D. & Freedman, Roger A.</p>
+                    <div class="book-details">
+                        <p>Publisher: Pearson Higher Education</p>
+                        <p>Published: 2020</p>
+                    </div>
+                    <span class="book-casing">Hardcover</span>
+                    <p class="book-price">$129.99</p>
+                    <a href="#" class="buy-button">Buy Now</a>
+                    <div class="book-footer">
+                        <span class="book-rating">★★★★★</span>
+                        <span>560 pages</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Book 18 -->
+            <div class="book-card">
+                <img src="https://images.unsplash.com/photo-1581092581325-2d7106425f5c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Matter and Methods at Low Temperatures" class="book-image">
+                <div class="book-content">
+                    <h2 class="book-title">Matter and Methods at Low Temperatures</h2>
+                    <p class="book-author">By Pobell, Frank</p>
+                    <div class="book-details">
+                        <p>Publisher: Springer-Verlag Berlin Heidelberg</p>
+                        <p>Published: 2007</p>
+                    </div>
+                    <span class="book-casing">Hardcover</span>
+                    <p class="book-price">$94.50</p>
+                    <a href="#" class="buy-button">Buy Now</a>
+                    <div class="book-footer">
+                        <span class="book-rating">★★★★☆</span>
+                        <span>380 pages</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Book 19 -->
+            <div class="book-card">
+                <img src="https://images.unsplash.com/photo-1581093458797-7d0d3ce0d2f5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Precision Electroweak Physics at Electron-Positron Colliders" class="book-image">
+                <div class="book-content">
+                    <h2 class="book-title">Precision Electroweak Physics at Electron-Positron Colliders</h2>
+                    <p class="book-author">By Roth, Stefan</p>
+                    <div class="book-details">
+                        <p>Publisher: Springer</p>
+                        <p>Published: 2007</p>
+                    </div>
+                    <span class="book-casing">Hardcover</span>
+                    <p class="book-price">$108.75</p>
+                    <a href="#" class="buy-button">Buy Now</a>
+                    <div class="book-footer">
+                        <span class="book-rating">★★★★★</span>
+                        <span>420 pages</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Book 20 -->
+            <div class="book-card">
+                <img src="https://images.unsplash.com/photo-1581092581287-fe2a200a8ed4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Approaches to Fundamental Physics" class="book-image">
+                <div class="book-content">
+                    <h2 class="book-title">Approaches to Fundamental Physics</h2>
+                    <p class="book-author">By Stamatescu, Ion-Olimpiu & Seiler, Erhard</p>
+                    <div class="book-details">
+                        <p>Publisher: Springer-Verlag Berlin Heidelberg</p>
+                        <p>Published: 2007</p>
+                    </div>
+                    <span class="book-casing">Hardcover</span>
+                    <p class="book-price">$99.99</p>
+                    <a href="#" class="buy-button">Buy Now</a>
+                    <div class="book-footer">
+                        <span class="book-rating">★★★★☆</span>
+                        <span>370 pages</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="pagination">
+            <button class="pagination-btn active">1</button>
+            <button class="pagination-btn">2</button>
+            <button class="pagination-btn">3</button>
+        </div>
+        
+        <footer>
+            <p>© 2023 Physics Books Collection. All rights reserved.</p>
+            <p>Explore our vast collection of physics books across all disciplines</p>
+        </footer>
     </div>
+
+    <script>
+        // Simple interactivity for category buttons
+        document.querySelectorAll('.category-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.category-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+        
+        // Simple interactivity for pagination buttons
+        document.querySelectorAll('.pagination-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.pagination-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+    </script>
 </body>
 </html>
